@@ -5,6 +5,11 @@ const bodyParser = require("body-parser");
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// Routes
+
+const employeeRoutes = require("./routes/employee");
+app.use("/employee", employeeRoutes);
+
 app.listen(8080, () => {
   console.log("Server listening on port 8080");
 });
