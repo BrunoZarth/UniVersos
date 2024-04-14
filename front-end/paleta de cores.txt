@@ -1,0 +1,25 @@
+Laranja: #F15A29
+Vermelho: #D32F2E
+Rosa: #C2185B
+Roxo: #7B1FA2
+Roxo Escuro: #512DA8
+Índigo: #303F9F
+Azul: #1976D2
+Azul Claro: #0288D1
+Ciano: #0097A7
+Verde-azulado: #00796B
+
+
+
+:root {
+    --color1: #F15A29; /* Laranja */
+    --color2: #D32F2E; /* Vermelho */
+    --color3: #C2185B; /* Rosa */
+    --color4: #7B1FA2; /* Roxo */
+    --color5: #512DA8; /* Roxo Escuro */
+    --color6: #303F9F; /* Índigo */
+    --color7: #1976D2; /* Azul */
+    --color8: #0288D1; /* Azul Claro */
+    --color9: #0097A7; /* Ciano */
+    --color10: #00796B; /* Verde-azulado */
+}
