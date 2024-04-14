@@ -1,6 +1,10 @@
 const express = require("express");
 const app = express();
+const bodyParser = require("body-parser");
 
-app.listen(3001, () => {
-  console.log("Server listening on port 3001");
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+app.listen(8080, () => {
+  console.log("Server listening on port 8080");
 });
