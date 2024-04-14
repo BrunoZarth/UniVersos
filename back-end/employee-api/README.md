@@ -4,6 +4,18 @@ API CADASTRO DE FUNCIONÁRIOS:
 -> Bastantes opções de getBy.
 -> inserir 850 colaboradores no DB.
 
+-> O Funcionário loga, (ou seja, as rotas exigirão permissão)
+
+
+Rotas post: sujestões, reclamações, questionários/pesquisas;
+Rotas get: questionários/pesquisas (integração com api do administrador)
+
+As informações vão ser armazenadas em um banco de dados, protegendo o funcionário (sempre anônimo), somente informações sociais.
+
+
+
+
+
 funcionario json: 
 
 {
