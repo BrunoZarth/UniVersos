@@ -16,7 +16,7 @@ const getLastResearch = async (req, res) => {}
 const updateEmployee = async (req, res) => {}
 
 // DELETE
-const deleteEmployee = async (req, res) => {}
+const deleteEmployee = async (req, res) => {"mudançassss"}
 
 // "getBy" OPTIONS
 const getAll = async (req, res) => {
