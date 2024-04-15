@@ -109,7 +109,7 @@ class EmployeeService {
     // READ
     async getResearchById(id) {
         try {
-            const query = "SELECT * FROM research WHERE id = $1";
+            const query = "SELECT * FROM message WHERE id = $1";
             const values = [id];
             const results = await this.client.query(query, values);
             return results.rows;
@@ -122,7 +122,7 @@ class EmployeeService {
 
     async getAllResearch() {
         try {
-            const results = await this.client.query("SELECT * FROM research");
+            const results = await this.client.query("SELECT * FROM message");
             return results.rows;
         } catch (err) {
             console.error(err);
@@ -132,7 +132,7 @@ class EmployeeService {
 
     async getLastResearch() {
         try {
-            const results = await this.client.query("SELECT * FROM research ORDER BY id DESC LIMIT 1");
+            const results = await this.client.query("SELECT * FROM message ORDER BY id DESC LIMIT 1");
             return results.rows;
         } catch (err) {
             console.error(err);
