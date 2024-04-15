@@ -12,7 +12,25 @@ class EmployeeService {
         EmployeeValidator.validateFieldsOrThrowError(employee);
 
         const query = `INSERT INTO employee (id, name, position, email, password_hash, password_salt, adress, nationality, birth_date, education_level, gender, ethnicity, lgbtqi, pcd, neurodiverse, low_income_background, work_model, hire_date) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18) RETURNING *`;
-        const values = [employee.id, employee.name, employee.position, employee.email, employee.password.hash, employee.password.salt, employee.adress, employee.nationality, employee.birthDate, employee.education_level, employee.gender, employee.ethnicity, employee.lgbtqi, employee.pcd, employee.neurodiverse, employee.lowIncomeBackground, employee.workModel, employee.hireDate];
+        const values = [
+            UUIDGenerator.generate(), 
+            employee.name, 
+            employee.position, 
+            employee.email, 
+            employee.password.hash, 
+            employee.password.salt, 
+            employee.adress, 
+            employee.nationality, 
+            employee.birthDate, 
+            employee.education_level, 
+            employee.gender, 
+            employee.ethnicity, 
+            employee.lgbtqi, 
+            employee.pcd, 
+            employee.neurodiverse, 
+            employee.lowIncomeBackground, 
+            employee.workModel, 
+            employee.hireDate];
 
         try {
             const result = await this.client.query(query, values);
