@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS employee (
     password_salt VARCHAR(255) NOT NULL,
     adress VARCHAR(255),
     nationality VARCHAR(255),
-    age INTEGER,
+    birthdate DATE,
     education_level INTEGER,
     gender VARCHAR(255),
     ethnicity VARCHAR(255),
@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS message (
     message TEXT NOT NULL,
     position VARCHAR(255),
     nationality VARCHAR(255),
-    age INTEGER,
+    birthdate DATE,
     education_level INTEGER,
     gender VARCHAR(255),
     ethnicity VARCHAR(255),
@@ -35,5 +35,5 @@ CREATE TABLE IF NOT EXISTS message (
     neurodiverse BOOLEAN,
     low_income_background BOOLEAN,
     work_model VARCHAR(255),
-    hire_date TIMESTAMP NOT NULL
+    hire_date DATE NOT NULL
 );
