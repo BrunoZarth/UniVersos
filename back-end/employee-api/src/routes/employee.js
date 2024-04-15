@@ -43,7 +43,7 @@ router.get("/getByAdress/:adress", tokenValidated, employeeController.getByAdres
 
 router.get("/getByNationality/:nationality", tokenValidated, employeeController.getByNationality);
 
-router.get("/getByBirthDate/:BirthDate", tokenValidated, employeeController.getByAge);
+router.get("/getByBirthdate/:birthdate", tokenValidated, employeeController.getByBirthdate);
 
 router.get("/getByAgeRange/:minAge/:maxAge", tokenValidated, employeeController.getByAgeRange);
 
