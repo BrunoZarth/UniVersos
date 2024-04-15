@@ -1,16 +1,15 @@
-const employee = require("../model/employee");
+const Employee = require("../model/employee");
 
 class EmployeeService {
 
     constructor(client) {
         this.client = client;
-        this.employee = employee;
     }
 
     // CREATE
     async newEmployee(employee) {
-        // Validate the employee fields
-        employee.validateFields();
+
+        EmployeeValidator.validateFieldsOrThrowError(employee);
 
         const query = `INSERT INTO employee (id, name, position, email, password_hash, password_salt, adress, nationality, age, education_level, gender, ethnicity, lgbtqi, pcd, neurodiverse, low_income_background, work_model, hire_date) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18) RETURNING *`;
         const values = [employee.id, employee.name, employee.position, employee.email, employee.password.hash, employee.password.salt, employee.adress, employee.nationality, employee.age, employee.education_level, employee.gender, employee.ethnicity, employee.lgbtqi, employee.pcd, employee.neurodiverse, employee.lowIncomeBackground, employee.workModel, employee.hireDate];
@@ -24,21 +23,64 @@ class EmployeeService {
         }
     }
 
+    async sendMessage(message, employeeId) {
+        const employee = await this.getById(employeeId);
 
+        MessageValidator.verifyIfisValidOrThrowError(message);
 
-    async sendMessage() {
+        const query = `INSERT INTO message (id, message, position, nationality, age, education_level, gender, ethnicity, lgbtqi, pcd, neurodiverse, low_income_background, work_model, hire_date) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)`;
+        const values = [
+            UUIDGenerator.generate(), 
+            message, 
+            employee.position, 
+            employee.nationality, 
+            employee.age, 
+            employee.education_level, 
+            employee.gender, 
+            employee.ethnicity, 
+            employee.lgbtqi, 
+            employee.pcd, 
+            employee.neurodiverse, 
+            employee.low_income_background, 
+            employee.work_model, 
+            employee.hire_date
+        ];
+    
         try {
-            const results = await this.client.query("INSERT INTO message ...");
+            const results = await this.client.query(query, values);
             return results.rows;
         } catch (err) {
             console.error(err);
             throw err;
         }
     }
+    
 
-    async sendResearch() {
+    async sendResearch(research, employeeId) {
+        const employee = await this.getById(employeeId);
+
+        MessageValidator.verifyIfisValidOrThrowError(research);
+
+        const query = `INSERT INTO research (id, research, position, nationality, age, education_level, gender, ethnicity, lgbtqi, pcd, neurodiverse, low_income_background, work_model, hire_date) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)`;
+        const values = [
+            UUIDGenerator.generate(), 
+            research, 
+            employee.position, 
+            employee.nationality, 
+            employee.age, 
+            employee.education_level, 
+            employee.gender, 
+            employee.ethnicity, 
+            employee.lgbtqi, 
+            employee.pcd, 
+            employee.neurodiverse, 
+            employee.low_income_background, 
+            employee.work_model, 
+            employee.hire_date
+        ];
+    
         try {
-            const results = await this.client.query("INSERT INTO research ...");
+            const results = await this.client.query(query, values);
             return results.rows;
         } catch (err) {
             console.error(err);
@@ -47,15 +89,18 @@ class EmployeeService {
     }
 
     // READ
-    async getResearchById() {
+    async getResearchById(id) {
         try {
-            const results = await this.client.query("SELECT * FROM research WHERE id = ...");
+            const query = "SELECT * FROM research WHERE id = $1";
+            const values = [id];
+            const results = await this.client.query(query, values);
             return results.rows;
         } catch (err) {
             console.error(err);
             throw err;
         }
     }
+    
 
     async getAllResearch() {
         try {
@@ -78,26 +123,39 @@ class EmployeeService {
     }
 
     // UPDATE
-    async updateEmployee() {
+    async updateEmployee(employee) {
+
+        const employeeObject = new Employee(employee);
+        employeeObject.validateFields();
+    
+        const query = `UPDATE employee SET name = $2, position = $3, email = $4, password_hash = $5, password_salt = $6, adress = $7, nationality = $8, age = $9, education_level = $10, gender = $11, ethnicity = $12, lgbtqi = $13, pcd = $14, neurodiverse = $15, low_income_background = $16, work_model = $17, hire_date = $18 WHERE id = $1 RETURNING *`;
+        
+        const values = [employee.id, employee.name, employee.position, employee.email, employee.password.hash, employee.password.salt, employee.adress, employee.nationality, employee.age, employee.education_level, employee.gender, employee.ethnicity, employee.lgbtqi, employee.pcd, employee.neurodiverse, employee.lowIncomeBackground, employee.workModel, employee.hireDate];
+    
         try {
-            const results = await this.client.query("UPDATE employee SET ... WHERE id = ...");
-            return results.rows;
-        } catch (err) {
-            console.error(err);
-            throw err;
+            const result = await this.client.query(query, values);
+            return result.rows[0];
+        } catch (error) {
+            console.error(`Error updating employee: ${error}`);
+            throw error;
         }
     }
+    
 
     // DELETE
-    async deleteEmployee() {
+    async deleteEmployee(id) {
         try {
-            const results = await this.client.query("DELETE FROM employee WHERE id = ...");
-            return results.rows;
+            const query = "DELETE FROM employee WHERE id = $1";
+            const values = [id];
+            const results = await this.client.query(query, values);
+            // Retorna o número de linhas afetadas
+            return results.rowCount;
         } catch (err) {
-            console.error(err);
+            console.error(`Error deleting employee with id ${id}:`, err);
             throw err;
         }
     }
+    
 
     // "getBy" OPTIONS
     async getAll() {
@@ -109,177 +167,211 @@ class EmployeeService {
             throw err;
         }
     }
-
-    async getById() {
+    
+    async getById(id) {
         try {
-            const results = await this.client.query("SELECT * FROM employee WHERE id = ...");
+            const query = "SELECT * FROM employee WHERE id = $1";
+            const values = [id];
+            const results = await this.client.query(query, values);
+            return results.rows[0];
+        } catch (err) {
+            console.error(err);
+            throw err;
+        }
+    }
+    
+    async getByName(name) {
+        try {
+            const query = "SELECT * FROM employee WHERE name = $1";
+            const values = [name];
+            const results = await this.client.query(query, values);
             return results.rows;
         } catch (err) {
             console.error(err);
             throw err;
         }
     }
-
-    async getByName() {
+    
+    async getByPosition(position) {
         try {
-            const results = await this.client.query("SELECT * FROM employee WHERE name = ...");
+            const query = "SELECT * FROM employee WHERE position = $1";
+            const values = [position];
+            const results = await this.client.query(query, values);
             return results.rows;
         } catch (err) {
             console.error(err);
             throw err;
         }
     }
-
-    async getByPosition() {
+    
+    async getByEmail(email) {
         try {
-            const results = await this.client.query("SELECT * FROM employee WHERE position = ...");
+            const query = "SELECT * FROM employee WHERE email = $1";
+            const values = [email];
+            const results = await this.client.query(query, values);
             return results.rows;
         } catch (err) {
             console.error(err);
             throw err;
         }
     }
-
-    async getByEmail() {
+    
+    async getByAdress(adress) {
         try {
-            const results = await this.client.query("SELECT * FROM employee WHERE email = ...");
+            const query = "SELECT * FROM employee WHERE adress = $1";
+            const values = [adress];
+            const results = await this.client.query(query, values);
             return results.rows;
         } catch (err) {
             console.error(err);
             throw err;
         }
     }
-
-    async getByAdress() {
+    
+    async getByNationality(nationality) {
         try {
-            const results = await this.client.query("SELECT * FROM employee WHERE adress = ...");
+            const query = "SELECT * FROM employee WHERE nationality = $1";
+            const values = [nationality];
+            const results = await this.client.query(query, values);
             return results.rows;
         } catch (err) {
             console.error(err);
             throw err;
         }
     }
-
-    async getByNationality() {
+    
+    async getByAge(age) {
         try {
-            const results = await this.client.query("SELECT * FROM employee WHERE nationality = ...");
+            const query = "SELECT * FROM employee WHERE age = $1";
+            const values = [age];
+            const results = await this.client.query(query, values);
             return results.rows;
         } catch (err) {
             console.error(err);
             throw err;
         }
     }
-
-    async getByAge() {
+    
+    async getByAgeRange(minAge, maxAge) {
         try {
-            const results = await this.client.query("SELECT * FROM employee WHERE age = ...");
+            const query = "SELECT * FROM employee WHERE age BETWEEN $1 AND $2";
+            const values = [minAge, maxAge];
+            const results = await this.client.query(query, values);
             return results.rows;
         } catch (err) {
             console.error(err);
             throw err;
         }
     }
-
-    async getByAgeRange() {
+    
+    async getByEducationLevel(education_level) {
         try {
-            const results = await this.client.query("SELECT * FROM employee WHERE age BETWEEN ... AND ...");
+            const query = "SELECT * FROM employee WHERE education_level = $1";
+            const values = [education_level];
+            const results = await this.client.query(query, values);
             return results.rows;
         } catch (err) {
             console.error(err);
             throw err;
         }
     }
-
-    async getByEducationLevel() {
+    
+    async getByGender(gender) {
         try {
-            const results = await this.client.query("SELECT * FROM employee WHERE education_level = ...");
+            const query = "SELECT * FROM employee WHERE gender = $1";
+            const values = [gender];
+            const results = await this.client.query(query, values);
             return results.rows;
         } catch (err) {
             console.error(err);
             throw err;
         }
     }
-
-    async getByGender() {
+    
+    async getByEthnicity(ethnicity) {
         try {
-            const results = await this.client.query("SELECT * FROM employee WHERE gender = ...");
+            const query = "SELECT * FROM employee WHERE ethnicity = $1";
+            const values = [ethnicity];
+            const results = await this.client.query(query, values);
             return results.rows;
         } catch (err) {
             console.error(err);
             throw err;
         }
     }
-
-    async getByEthnicity() {
+    
+    async getByLgbtqi(lgbtqi) {
         try {
-            const results = await this.client.query("SELECT * FROM employee WHERE ethnicity = ...");
+            const query = "SELECT * FROM employee WHERE lgbtqi = $1";
+            const values = [lgbtqi];
+            const results = await this.client.query(query, values);
             return results.rows;
         } catch (err) {
             console.error(err);
             throw err;
         }
     }
-
-    async getByLgbtqi() {
+    
+    async getByPcd(pcd) {
         try {
-            const results = await this.client.query("SELECT * FROM employee WHERE lgbtqi = ...");
+            const query = "SELECT * FROM employee WHERE pcd = $1";
+            const values = [pcd];
+            const results = await this.client.query(query, values);
             return results.rows;
         } catch (err) {
             console.error(err);
             throw err;
         }
     }
+    
 
-    async getByPcd() {
+    async getByNeurodiverse(neurodiverse) {
         try {
-            const results = await this.client.query("SELECT * FROM employee WHERE pcd = ...");
+            const query = "SELECT * FROM employee WHERE neurodiverse = $1";
+            const values = [neurodiverse];
+            const results = await this.client.query(query, values);
             return results.rows;
         } catch (err) {
             console.error(err);
             throw err;
         }
     }
-
-    async getByNeurodiverse() {
+    
+    async getByLowIncomeBackground(lowIncomeBackground) {
         try {
-            const results = await this.client.query("SELECT * FROM employee WHERE neurodiverse = ...");
+            const query = "SELECT * FROM employee WHERE low_income_background = $1";
+            const values = [lowIncomeBackground];
+            const results = await this.client.query(query, values);
             return results.rows;
         } catch (err) {
             console.error(err);
             throw err;
         }
     }
-
-    async getByLowIncomeBackground() {
+    
+    async getByWorkModel(workModel) {
         try {
-            const results = await this.client.query("SELECT * FROM employee WHERE low_income_background = ...");
+            const query = "SELECT * FROM employee WHERE work_model = $1"; //home, presencial
+            const values = [workModel];
+            const results = await this.client.query(query, values);
             return results.rows;
         } catch (err) {
             console.error(err);
             throw err;
         }
     }
-
-    async getByWorkModel() {
+    
+    async getByHireDate(hireDate) {
         try {
-            const results = await this.client.query("SELECT * FROM employee WHERE work_model = ..."); //home, presencial
+            const query = "SELECT * FROM employee WHERE hire_date = $1";
+            const values = [hireDate];
+            const results = await this.client.query(query, values);
             return results.rows;
         } catch (err) {
             console.error(err);
             throw err;
         }
     }
-
-    async getByHireDate() {
-        try {
-            const results = await this.client.query("SELECT * FROM employee WHERE hire_date = ...");
-            return results.rows;
-        } catch (err) {
-            console.error(err);
-            throw err;
-        }
-    }
-
 
 }
 
