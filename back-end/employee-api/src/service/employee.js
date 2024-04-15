@@ -258,7 +258,7 @@ class EmployeeService {
         }
     }
     
-    async getByAge(age) {
+    async getByByrthdate(age) {
         try {
             const query = "SELECT * FROM employee WHERE age = $1";
             const values = [age];
@@ -272,7 +272,14 @@ class EmployeeService {
     
     async getByAgeRange(minAge, maxAge) {
         try {
-            const query = "SELECT * FROM employee WHERE age BETWEEN $1 AND $2";
+            const currentDate = new Date();
+            const minBirthdate = new Date();
+            minBirthdate.setFullYear(currentDate.getFullYear() - maxAge - 1);
+            const maxBirthdate = new Date();
+            maxBirthdate.setFullYear(currentDate.getFullYear() - minAge + 1);
+    
+            const query = `SELECT * FROM employee WHERE 
+                           EXTRACT(YEAR FROM AGE(TIMESTAMP 'now()', birthdate)) BETWEEN $1 AND $2`;
             const values = [minAge, maxAge];
             const results = await this.client.query(query, values);
             return results.rows;
@@ -281,6 +288,7 @@ class EmployeeService {
             throw err;
         }
     }
+    
     
     async getByEducationLevel(education_level) {
         try {
