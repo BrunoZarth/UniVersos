@@ -80,8 +80,8 @@ class Employee {
         return this.employeeService.getByNationality();
     }   
 
-    async getByAge() {
-        return this.employeeService.getByAge();
+    async getByBirthdate() {
+        return this.employeeService.getByBirthdate();
     }
     
     async getByAgeRange() {

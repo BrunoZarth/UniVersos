@@ -11,8 +11,26 @@ class EmployeeService {
 
         EmployeeValidator.validateFieldsOrThrowError(employee);
 
-        const query = `INSERT INTO employee (id, name, position, email, password_hash, password_salt, adress, nationality, age, education_level, gender, ethnicity, lgbtqi, pcd, neurodiverse, low_income_background, work_model, hire_date) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18) RETURNING *`;
-        const values = [employee.id, employee.name, employee.position, employee.email, employee.password.hash, employee.password.salt, employee.adress, employee.nationality, employee.age, employee.education_level, employee.gender, employee.ethnicity, employee.lgbtqi, employee.pcd, employee.neurodiverse, employee.lowIncomeBackground, employee.workModel, employee.hireDate];
+        const query = `INSERT INTO employee (id, name, position, email, password_hash, password_salt, adress, nationality, birth_date, education_level, gender, ethnicity, lgbtqi, pcd, neurodiverse, low_income_background, work_model, hire_date) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18) RETURNING *`;
+        const values = [
+            UUIDGenerator.generate(), 
+            employee.name, 
+            employee.position, 
+            employee.email, 
+            employee.password.hash, 
+            employee.password.salt, 
+            employee.adress, 
+            employee.nationality, 
+            employee.birthDate, 
+            employee.education_level, 
+            employee.gender, 
+            employee.ethnicity, 
+            employee.lgbtqi, 
+            employee.pcd, 
+            employee.neurodiverse, 
+            employee.lowIncomeBackground, 
+            employee.workModel, 
+            employee.hireDate];
 
         try {
             const result = await this.client.query(query, values);
@@ -28,13 +46,13 @@ class EmployeeService {
 
         MessageValidator.verifyIfisValidOrThrowError(message);
 
-        const query = `INSERT INTO message (id, message, position, nationality, age, education_level, gender, ethnicity, lgbtqi, pcd, neurodiverse, low_income_background, work_model, hire_date) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)`;
+        const query = `INSERT INTO message (id, message, position, nationality, birth_date, education_level, gender, ethnicity, lgbtqi, pcd, neurodiverse, low_income_background, work_model, hire_date) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)`;
         const values = [
             UUIDGenerator.generate(), 
             message, 
             employee.position, 
             employee.nationality, 
-            employee.age, 
+            employee.birthDate, 
             employee.education_level, 
             employee.gender, 
             employee.ethnicity, 
@@ -67,7 +85,7 @@ class EmployeeService {
             research, 
             employee.position, 
             employee.nationality, 
-            employee.age, 
+            employee.birthDate, 
             employee.education_level, 
             employee.gender, 
             employee.ethnicity, 
@@ -130,7 +148,7 @@ class EmployeeService {
     
         const query = `UPDATE employee SET name = $2, position = $3, email = $4, password_hash = $5, password_salt = $6, adress = $7, nationality = $8, age = $9, education_level = $10, gender = $11, ethnicity = $12, lgbtqi = $13, pcd = $14, neurodiverse = $15, low_income_background = $16, work_model = $17, hire_date = $18 WHERE id = $1 RETURNING *`;
         
-        const values = [employee.id, employee.name, employee.position, employee.email, employee.password.hash, employee.password.salt, employee.adress, employee.nationality, employee.age, employee.education_level, employee.gender, employee.ethnicity, employee.lgbtqi, employee.pcd, employee.neurodiverse, employee.lowIncomeBackground, employee.workModel, employee.hireDate];
+        const values = [employee.id, employee.name, employee.position, employee.email, employee.password.hash, employee.password.salt, employee.adress, employee.nationality, employee.birthDate, employee.education_level, employee.gender, employee.ethnicity, employee.lgbtqi, employee.pcd, employee.neurodiverse, employee.lowIncomeBackground, employee.workModel, employee.hireDate];
     
         try {
             const result = await this.client.query(query, values);
@@ -240,7 +258,7 @@ class EmployeeService {
         }
     }
     
-    async getByAge(age) {
+    async getByByrthdate(age) {
         try {
             const query = "SELECT * FROM employee WHERE age = $1";
             const values = [age];
@@ -254,7 +272,14 @@ class EmployeeService {
     
     async getByAgeRange(minAge, maxAge) {
         try {
-            const query = "SELECT * FROM employee WHERE age BETWEEN $1 AND $2";
+            const currentDate = new Date();
+            const minBirthdate = new Date();
+            minBirthdate.setFullYear(currentDate.getFullYear() - maxAge - 1);
+            const maxBirthdate = new Date();
+            maxBirthdate.setFullYear(currentDate.getFullYear() - minAge + 1);
+    
+            const query = `SELECT * FROM employee WHERE 
+                           EXTRACT(YEAR FROM AGE(TIMESTAMP 'now()', birthdate)) BETWEEN $1 AND $2`;
             const values = [minAge, maxAge];
             const results = await this.client.query(query, values);
             return results.rows;
@@ -263,6 +288,7 @@ class EmployeeService {
             throw err;
         }
     }
+    
     
     async getByEducationLevel(education_level) {
         try {

@@ -43,9 +43,9 @@ router.get("/getByAdress/:adress", tokenValidated, employeeController.getByAdres
 
 router.get("/getByNationality/:nationality", tokenValidated, employeeController.getByNationality);
 
-router.get("/getByAge/:age", tokenValidated, employeeController.getByAge);
+router.get("/getByBirthDate/:BirthDate", tokenValidated, employeeController.getByAge);
 
-router.get("/getByAgeRange/:age/:age2", tokenValidated, employeeController.getByAge);
+router.get("/getByAgeRange/:minAge/:maxAge", tokenValidated, employeeController.getByAgeRange);
 
 router.get("/getByEducationLevel/:educationLevel", tokenValidated, employeeController.getByEducation_level);
 
