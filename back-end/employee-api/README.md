@@ -19,7 +19,7 @@ As informações vão ser armazenadas em um banco de dados, protegendo o funcion
 funcionario json: 
 
 {
-  "employer": {
+  "employee": {
     "id": "UUID",
     "name": "String",
     "position": "String",
