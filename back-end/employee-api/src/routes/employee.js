@@ -64,3 +64,6 @@ router.get("/getByLowIncomeBackground/:lowIncomeBackground", tokenValidated, emp
 router.get("/getByWorkModel/:workModel", tokenValidated, employeeController.getByWorkModel); //home, presencial
 
 router.get("/getByHireDate/:hireDate", tokenValidated, employeeController.getByHireDate);
+
+
+module.exports = router;
