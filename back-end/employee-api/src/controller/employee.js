@@ -165,13 +165,13 @@ const getByNationality = async (req, res) => {
     }
 }
 
-const getByAge = async (req, res) => {
+const getByBirthdate = async (req, res) => {
     try {
-        const employees = await employeeService.getByAge(req.params.age);
+        const employees = await employeeService.getByBirthdate(req.params.birthdate);
         res.status(200).json(employees);
     } catch (error) {
-        console.error(`Error getting employees by age: ${error}`);
-        res.status(500).send('Error getting employees by age');
+        console.error(`Error getting employees by birthdate: ${error}`);
+        res.status(500).send('Error getting employees by birthdate');
     }
 }
 
@@ -291,7 +291,7 @@ module.exports = {
     getByEmail,
     getByAdress,
     getByNationality,
-    getByAge,
+    getByBirthdate,
     getByAgeRange,
     getByEducationLevel,
     getByGender,
