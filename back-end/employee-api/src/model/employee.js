@@ -1,43 +1,19 @@
 class Employee {
 
-    constructor(arg, employeeService) {
-        if(arg instanceof require('pg').Client) {
-            // Initialize as a client
-            this.client = arg;
+    constructor(client, employeeService) {
+        if(arg1 instanceof require('pg').Client) {
+            // Initialize with postgres client
+            this.client = client;
             this.employeeService = employeeService;
-        } else {
-            // Initialize as an employee object
-            this.id = arg.id;
-            this.name = arg.name;
-            this.position = arg.position;
-            this.email = arg.email;
-            this.password = arg.password;
-            this.adress = arg.adress;
-            this.nationality = arg.nationality;
-            this.age = arg.age;
-            this.education_level = arg.education_level;
-            this.gender = arg.gender;
-            this.ethnicity = arg.ethnicity;
-            this.lgbtqi = arg.lgbtqi;
-            this.pcd = arg.pcd;
-            this.neurodiverse = arg.neurodiverse;
-            this.lowIncomeBackground = arg.lowIncomeBackground;
-            this.workModel = arg.workModel;
-            this.hireDate = arg.hireDate;
+        } 
+        
+        /*
+        if (...){
+            // TODO implements aother kinds of DB's
         }
+        */
     }
 
-    // CLASS METHODS
-
-    validateFields() {
-        for (let key in this) {
-            if (this[key] === undefined) {
-                throw new Error(`The field ${key} is required`);
-            }
-        }
-    }
-
-    // ASSYNC METHODS
     // CREATE
 
     async newEmployee() {
@@ -150,4 +126,4 @@ class Employee {
     
 }
 
-module.exports = (arg, employeeService) => new Employee(arg, employeeService);
+module.exports = (arg1, arg2) => new Employee(arg1, arg2);
