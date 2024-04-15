@@ -1,4 +1,5 @@
-const employeeService = require("../service/employee.js");
+const client = require("../config/config.js");
+const employeeService = require("../service/employee.js")(client);
 
 // Authentication
 const login = async (req, res) => {
