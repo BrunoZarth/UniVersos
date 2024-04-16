@@ -1,11 +1,13 @@
 const client = require("../config/config.js");
 const employeeService = require("../service/employee.js")(client);
+const crypto = require('crypto');
+
 
 // Authentication
 const login = async (req, res) => {
     const PRIVATE_KEY = "your-private-key";
     try {
-        const employee = await employeeService.findByEmail(req.body.email)[0];
+        const employee = await employeeService.getByEmail(req.body.email);
         
         const inputHash = crypto.pbkdf2Sync(req.body.password, employee.password.salt, 1000, 64, 'sha512').toString('hex');
 

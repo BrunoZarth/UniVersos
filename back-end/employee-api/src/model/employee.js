@@ -1,7 +1,7 @@
 class Employee {
 
     constructor(client, employeeService) {
-        if(arg1 instanceof require('pg').Client) {
+        if(client instanceof require('pg').Client) {
             // Initialize with postgres client
             this.client = client;
             this.employeeService = employeeService;
@@ -16,8 +16,8 @@ class Employee {
 
     // CREATE
 
-    async newEmployee() {
-        return this.employeeService.newEmployee();
+    async newEmployee(employee) {
+        return this.employeeService.newEmployee(employee);
     }
 
     async sendMessage() {

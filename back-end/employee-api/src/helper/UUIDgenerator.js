@@ -7,3 +7,5 @@ class UUIDGenerator {
         });
     }
 }
+
+module.exports = UUIDGenerator;

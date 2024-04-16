@@ -4,45 +4,13 @@ const employeeService = require("../service/employee.js")(client);
 
 // CREATE
 
-/**
- * @swagger
- * /employee/new:
- *   post:
- *     summary: Create a new employee
- *     description: This can only be done by the logged in user.
- *     parameters:
- *       - in: header
- *         name: token
- *         schema:
- *           type: string
- *         required: true
- *         description: Token of the authenticated user
- *       - in: body
- *         name: employee
- *         description: The employee to create.
- *         schema:
- *           $ref: '#/components/schemas/Employee'
- *     responses:
- *       201:
- *         description: Employee created
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Employee'
- *       400:
- *         description: Invalid input
- *       401:
- *         description: Unauthorized
- *       500:
- *         description: Error creating new employee
- */
 const newEmployee = async (req, res) => {
     try {
         const employeeData = req.body;
 
         const newEmployee = await employeeService.newEmployee(employeeData);
 
-        res.status(201).json(newEmployee);
+        res.status(201).json(newEmployee).email;
     } catch (error) {
         console.error(`Error creating new employee: ${error}`);
         res.status(500).send('Error creating new employee');

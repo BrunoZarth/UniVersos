@@ -11,14 +11,37 @@
     "http"
   ],
   "paths": {
-    "/new": {
+    "/employee/new": {
       "post": {
         "description": "",
         "parameters": [
           {
-            "name": "x-access-token",
-            "in": "header",
-            "type": "string"
+            "name": "employee",
+            "in": "body",
+            "description": "Informações do funcionário",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": { "type": "string", "maxLength": 255 },
+                "position": { "type": "string", "maxLength": 255 },
+                "email": { "type": "string", "format": "email", "maxLength": 255 },
+                "password": { "type": "string", "maxLength": 255 },
+                "adress": { "type": "string", "maxLength": 255 },
+                "nationality": { "type": "string", "maxLength": 255 },
+                "birthdate": { "type": "string", "format": "date" },
+                "education_level": { "type": "integer" },
+                "gender": { "type": "string", "maxLength": 255 },
+                "ethnicity": { "type": "string", "maxLength": 255 },
+                "lgbtqi": { "type": "boolean" },
+                "pcd": { "type": "boolean" },
+                "neurodiverse": { "type": "boolean" },
+                "low_income_background": { "type": "boolean" },
+                "work_model": { "type": "string", "maxLength": 255 },
+                "hire_date": { "type": "string", "format": "date" }
+              },
+              "required": ["name", "position", "email", "password_hash", "password_salt", "hire_date"]
+            }
           }
         ],
         "responses": {
@@ -34,7 +57,7 @@
         }
       }
     },
-    "/message": {
+    "/employee/message": {
       "post": {
         "description": "",
         "parameters": [
@@ -57,7 +80,7 @@
         }
       }
     },
-    "/research/{id}": {
+    "/employee/research/{id}": {
       "post": {
         "description": "",
         "parameters": [
@@ -105,7 +128,7 @@
         }
       }
     },
-    "/research": {
+    "/employee/research": {
       "get": {
         "description": "",
         "responses": {
@@ -118,7 +141,7 @@
         }
       }
     },
-    "/lastResearch": {
+    "/employee/lastResearch": {
       "get": {
         "description": "",
         "responses": {
@@ -131,7 +154,7 @@
         }
       }
     },
-    "/update": {
+    "/employee/update": {
       "put": {
         "description": "",
         "parameters": [
@@ -154,7 +177,7 @@
         }
       }
     },
-    "/delete": {
+    "/employee/delete": {
       "delete": {
         "description": "",
         "parameters": [
@@ -177,7 +200,7 @@
         }
       }
     },
-    "/getAll": {
+    "/employee/getAll": {
       "get": {
         "description": "",
         "parameters": [
@@ -203,7 +226,7 @@
         }
       }
     },
-    "/getById/{id}": {
+    "/employee/getById/{id}": {
       "get": {
         "description": "",
         "parameters": [
@@ -232,7 +255,7 @@
         }
       }
     },
-    "/getByName/{name}": {
+    "/employee/getByName/{name}": {
       "get": {
         "description": "",
         "parameters": [
@@ -261,7 +284,7 @@
         }
       }
     },
-    "/getByPosition/{position}": {
+    "/employee/getByPosition/{position}": {
       "get": {
         "description": "",
         "parameters": [
@@ -290,7 +313,7 @@
         }
       }
     },
-    "/getByEmail/{email}": {
+    "/employee/getByEmail/{email}": {
       "get": {
         "description": "",
         "parameters": [
@@ -319,7 +342,7 @@
         }
       }
     },
-    "/getByAdress/{adress}": {
+    "/employee/getByAdress/{adress}": {
       "get": {
         "description": "",
         "parameters": [
@@ -348,7 +371,7 @@
         }
       }
     },
-    "/getByNationality/{nationality}": {
+    "/employee/getByNationality/{nationality}": {
       "get": {
         "description": "",
         "parameters": [
@@ -377,7 +400,7 @@
         }
       }
     },
-    "/getByBirthdate/{birthdate}": {
+    "/employee/getByBirthdate/{birthdate}": {
       "get": {
         "description": "",
         "parameters": [
@@ -406,7 +429,7 @@
         }
       }
     },
-    "/getByAgeRange/{minAge}/{maxAge}": {
+    "/employee/getByAgeRange/{minAge}/{maxAge}": {
       "get": {
         "description": "",
         "parameters": [
@@ -441,7 +464,7 @@
         }
       }
     },
-    "/getByEducationLevel/{educationLevel}": {
+    "/employee/getByEducationLevel/{educationLevel}": {
       "get": {
         "description": "",
         "parameters": [
@@ -470,7 +493,7 @@
         }
       }
     },
-    "/getByGender/{gender}": {
+    "/employee/getByGender/{gender}": {
       "get": {
         "description": "",
         "parameters": [
@@ -499,7 +522,7 @@
         }
       }
     },
-    "/getByEthnicity/{ethnicity}": {
+    "/employee/getByEthnicity/{ethnicity}": {
       "get": {
         "description": "",
         "parameters": [
@@ -528,7 +551,7 @@
         }
       }
     },
-    "/getByLgbtqi/{lgbtqi}": {
+    "/employee/getByLgbtqi/{lgbtqi}": {
       "get": {
         "description": "",
         "parameters": [
@@ -557,7 +580,7 @@
         }
       }
     },
-    "/getByPcd/{pcd}": {
+    "/employee/getByPcd/{pcd}": {
       "get": {
         "description": "",
         "parameters": [
@@ -586,7 +609,7 @@
         }
       }
     },
-    "/getByNeurodiverse/{neurodiverse}": {
+    "/employee/getByNeurodiverse/{neurodiverse}": {
       "get": {
         "description": "",
         "parameters": [
@@ -615,7 +638,7 @@
         }
       }
     },
-    "/getByLowIncomeBackground/{lowIncomeBackground}": {
+    "/employee/getByLowIncomeBackground/{lowIncomeBackground}": {
       "get": {
         "description": "",
         "parameters": [
@@ -644,7 +667,7 @@
         }
       }
     },
-    "/getByWorkModel/{workModel}": {
+    "/employee/getByWorkModel/{workModel}": {
       "get": {
         "description": "",
         "parameters": [
@@ -673,7 +696,7 @@
         }
       }
     },
-    "/getByHireDate/{hireDate}": {
+    "/employee/getByHireDate/{hireDate}": {
       "get": {
         "description": "",
         "parameters": [
@@ -702,7 +725,7 @@
         }
       }
     },
-    "/": {
+    "/login": {
       "post": {
         "description": "",
         "parameters": [

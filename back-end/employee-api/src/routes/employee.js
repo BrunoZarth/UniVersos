@@ -5,7 +5,7 @@ const { tokenValidated } = require("../middleware/auth");
 
 // CREATE
 
-router.post("/new", tokenValidated, employeeController.newEmployee);
+router.post("/new", employeeController.newEmployee);
 
 router.post("/message", tokenValidated, employeeController.sendMessage);
 

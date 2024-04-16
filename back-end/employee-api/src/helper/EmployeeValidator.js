@@ -1,11 +1,11 @@
-class MessageValidator {
+class EmployeeValidator {
     
     static verifyIfIsValidOrThrowError(message) {
-        verifySQLInjection(message);
-        verifyMessageLength(message);
+        this.verifySQLInjection(message);
+        this.verifyMessageLength(message);
     }
 
-    verifySQLInjection(message) {
+    static verifySQLInjection(message) {
         const sqlInjectionPatterns = [
             /['"\\;()#*?%&_={}<>]/g,  
             /\b(ALTER|CREATE|DELETE|DROP|EXEC(UTE)?|INSERT( INTO)?|MERGE|SELECT|UPDATE|UNION( ALL)?)\b/i 
@@ -18,9 +18,11 @@ class MessageValidator {
         }
     }
 
-    verifyMessageLength(message){
+    static verifyMessageLength(message){
         if (message.length > 50000) {
             throw new Error('Message is too long');
         }
     }
 }
+
+module.exports = EmployeeValidator;
